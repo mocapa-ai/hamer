@@ -16,13 +16,28 @@ Code repository for the paper:
 - [2024/05] We have released the HInt dataset annotations! Please check [here](https://github.com/ddshan/hint).
 - [2023/12] Original release!
 
-## Installation
+## 1. Installation
 First you need to clone the repo:
 ```
 git clone --recursive https://github.com/geopavlakos/hamer.git
 cd hamer
 ```
 
+### 1.1 Installing using **uv**
+Create a virtual environment with uv
+```bash
+uv venv --python 3.11
+```
+
+Install the dependencies
+```bash
+uv pip install torch --torch-backend=cu128
+uv pip install "setuptools<70" wheel pip
+uv pip install -e .[all]
+uv pip install -e third-party/ViTPose --no-build-isolation
+```
+
+### 1.2 Installing using venv or conda
 We recommend creating a virtual environment for HaMeR. You can use venv:
 ```bash
 python3.10 -m venv .hamer
@@ -42,6 +57,7 @@ pip install -e .[all]
 pip install -v -e third-party/ViTPose
 ```
 
+### 1.3 Install data files
 You also need to download the trained models:
 ```bash
 bash fetch_demo_data.sh
