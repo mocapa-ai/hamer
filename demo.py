@@ -5,6 +5,27 @@ import os
 import cv2
 import numpy as np
 
+import inspect
+
+# 1. Patch 'inspect' for Python 3.11 compatibility
+if not hasattr(inspect, 'getargspec'):
+    inspect.getargspec = inspect.getfullargspec
+
+# 2. Patch 'numpy' for compatibility with legacy chumpy
+np_patches = {
+    'bool': bool,
+    'int': int,
+    'float': float,
+    'complex': complex,
+    'object': object,
+    'unicode': str,
+    'str': str,
+}
+
+for name, replacement in np_patches.items():
+    if not hasattr(np, name):
+        setattr(np, name, replacement)
+
 from hamer.configs import CACHE_DIR_HAMER
 from hamer.models import HAMER, download_models, load_hamer, DEFAULT_CHECKPOINT
 from hamer.utils import recursive_to
@@ -34,7 +55,7 @@ def main():
     args = parser.parse_args()
 
     # Download and load checkpoints
-    download_models(CACHE_DIR_HAMER)
+    # download_models(CACHE_DIR_HAMER)
     model, model_cfg = load_hamer(args.checkpoint)
 
     # Setup HaMeR model
